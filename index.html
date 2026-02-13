@@ -3,220 +3,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ComplianceBnB - Kit Sicurezza</title>
+    <title>Audit Conformità Affitti Brevi | D.Lgs 191/2023</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-slate-50 font-sans text-slate-800 min-h-screen flex flex-col items-center py-12 px-4">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col items-center py-10 px-4">
 
-    <div class="max-w-xl w-full mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-100">
+    <div class="max-w-2xl w-full mx-auto bg-white rounded-xl shadow-2xl overflow-hidden border border-slate-300">
         
-        <div class="bg-red-600 p-8 text-white text-center">
-            <h1 class="text-3xl font-extrabold mb-2">ComplianceBnB</h1>
-            <p class="text-red-100 text-sm font-medium">Calcola i tuoi obblighi antincendio e genera il Kit Sicurezza ufficiale in 60 secondi.</p>
+        <div class="bg-slate-900 p-8 text-white border-b-4 border-red-600 text-center">
+            <h1 class="text-3xl font-extrabold mb-2 uppercase tracking-wide">Audit Sicurezza Affitti Brevi</h1>
+            <p class="text-slate-300 text-sm font-medium">Verifica conformità normativa D.Lgs 145/2023 (Legge 191/2023)</p>
         </div>
 
         <div id="form-section" class="p-8 block">
+            
+            <div class="bg-red-50 border-l-4 border-red-600 p-5 mb-8 rounded-r-lg">
+                <h3 class="font-bold text-red-900 text-sm mb-2 flex items-center gap-2">
+                    <span class="text-xl">⚠️</span> ATTENZIONE ALLE SANZIONI IN VIGORE
+                </h3>
+                <ul class="text-sm text-red-800 leading-relaxed list-disc list-inside">
+                    <li>Mancata esposizione cartello CIN: multe da <b>500€ a 5.000€</b></li>
+                    <li>Assenza estintori/rilevatori omologati: multe da <b>600€ a 6.000€</b></li>
+                </ul>
+                <p class="text-xs text-red-600 mt-3 font-semibold">Le Forze dell'Ordine effettuano controlli incrociati tramite la banca dati BDSR.</p>
+            </div>
+
             <form id="calc-form" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-1">Qual è il tuo codice CIN?</label>
-                    <input type="text" id="cin" required placeholder="es. IT048017B4..." class="w-full border border-slate-300 p-3 rounded-lg uppercase focus:ring-2 focus:ring-red-500 outline-none transition" />
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <label class="block text-sm font-bold text-slate-800 mb-1">1. Qual è il tuo Codice CIN Ministeriale?</label>
+                    <p class="text-xs text-slate-500 mb-3">La legge impone l'esposizione all'esterno dello stabile. Il QR Code non è esplicitamente obbligatorio per legge ma è <b>fortemente raccomandato</b> dalla Polizia Locale per evitare ispezioni fisiche in casa.</p>
+                    <input type="text" id="cin" required placeholder="es. IT048017B4..." class="w-full border border-slate-300 p-3 rounded-lg uppercase focus:ring-2 focus:ring-slate-900 outline-none transition bg-white" />
                 </div>
+
                 <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1">Metri Quadri</label>
-                        <input type="number" id="mq" required min="1" placeholder="es. 85" class="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-red-500 outline-none transition" />
+                    <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                        <label class="block text-sm font-bold text-slate-800 mb-1">2. Metri Quadri</label>
+                        <input type="number" id="mq" required min="1" placeholder="es. 85" class="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-slate-900 outline-none transition bg-white" />
                     </div>
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1">N. di Piani</label>
-                        <input type="number" id="piani" required min="1" value="1" class="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-red-500 outline-none transition" />
+                    <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                        <label class="block text-sm font-bold text-slate-800 mb-1">3. Numero di Piani</label>
+                        <input type="number" id="piani" required min="1" value="1" class="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-slate-900 outline-none transition bg-white" />
                     </div>
                 </div>
-                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 flex items-center justify-between">
-                    <label class="text-sm font-bold text-slate-700 cursor-pointer select-none" for="hasGas">Hai fornelli a gas o caldaia in casa?</label>
-                    <input id="hasGas" type="checkbox" class="w-6 h-6 accent-red-600 rounded cursor-pointer" />
+
+                <div class="bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <label class="block text-sm font-bold text-slate-800 mb-1">4. Hai già installato estintori a norma?</label>
+                    <p class="text-xs text-slate-500 mb-3">Attenzione: i piccoli estintori da auto/barca da 1kg o 2kg <b>NON sono legali</b> per gli affitti brevi civili. Serve la sigla 13A.</p>
+                    <select id="estintori-status" class="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-slate-900 outline-none bg-white">
+                        <option value="no">No, devo ancora acquistarli</option>
+                        <option value="dubbio">Sì, ne ho uno piccolo ma non so se è omologato "13A"</option>
+                        <option value="si">Sì, ho estintori certificati 13A da 6kg</option>
+                    </select>
                 </div>
-                <button type="submit" class="w-full bg-red-600 text-white font-bold py-4 rounded-lg hover:bg-red-700 transition text-lg shadow-lg shadow-red-200">Verifica la mia Struttura</button>
+
+                <div class="space-y-4 bg-slate-50 p-5 rounded-lg border border-slate-200">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <label class="text-sm font-bold text-slate-800 cursor-pointer" for="hasGas">5. L'immobile ha impianti a gas?</label>
+                            <p class="text-xs text-slate-500 mt-1">Fornelli a gas, caldaie o stufe. (Se sei "Full Electric" togli la spunta).</p>
+                        </div>
+                        <input id="hasGas" type="checkbox" checked class="w-6 h-6 accent-slate-900 rounded cursor-pointer mt-1 shrink-0" />
+                    </div>
+                    
+                    <div class="border-t border-slate-200 pt-4 mt-2" id="boxRilevatore">
+                        <label class="block text-sm font-bold text-slate-800 mb-1">Hai già Rilevatori Gas e Monossido a norma EN 50194 / EN 50291?</label>
+                        <p class="text-xs text-slate-500 mb-3">I dispositivi acquistati a pochi euro senza questa certificazione europea comportano sanzione in caso di ispezione.</p>
+                        <select id="rilevatori-status" class="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-slate-900 outline-none bg-white">
+                            <option value="no">No, devo ancora acquistarli</option>
+                            <option value="dubbio">Sì, ma non so se hanno le certificazioni EN richieste</option>
+                            <option value="si">Sì, sono a norma EN 50291 / 50194</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-slate-900 text-white font-extrabold py-5 rounded-lg hover:bg-slate-800 transition text-xl shadow-xl uppercase tracking-wider mt-4">
+                    Esegui Audit Normativo
+                </button>
             </form>
         </div>
 
-        <div id="result-section" class="p-8 space-y-6 hidden">
+        <div id="result-section" class="p-8 space-y-6 hidden bg-white">
             <div class="text-center">
-                <span class="text-5xl">⚠️</span>
-                <h2 class="text-2xl font-bold text-red-700 mt-4">Risultato del controllo</h2>
+                <h2 class="text-3xl font-black text-slate-900 border-b-2 border-slate-100 pb-4">Esito Ispezione Digitale</h2>
             </div>
-            <ul class="bg-red-50 p-6 rounded-lg shadow-inner space-y-3 font-medium text-red-900 border border-red-100">
-                <li>🧯 N. <strong id="res-estintori"></strong> <strong>Estintore/i</strong> obbligatori</li>
-                <li id="res-gas"></li>
-            </ul>
-            <div class="bg-white border-2 border-emerald-500 p-6 rounded-xl shadow-md text-center">
-                <h3 class="text-xl font-bold text-emerald-700 mb-2">Scarica il Kit Premium</h3>
-                <p class="text-sm text-slate-600 mb-6">Genera il tuo Cartello da esporre (con QR Code a norma), il referto dettagliato per gli acquisti, il registro manutenzioni e il cartello emergenze.</p>
+
+            <div class="flex flex-col items-center bg-slate-50 p-6 rounded-xl border border-slate-200 shadow-sm mt-4">
+                <p class="text-sm font-bold text-slate-800 mb-2 uppercase tracking-wide text-center">QR Code Ministeriale Generato</p>
+                <canvas id="qr-preview" class="border-4 border-white shadow-md rounded-lg mb-3"></canvas>
+                <p class="text-xs text-slate-500 text-center px-4">Questo QR Code verrà integrato in automatico nel tuo Cartello Ufficiale PDF pronto da stampare.</p>
+            </div>
+
+            <div id="alerts-container" class="space-y-4 mt-6">
+                </div>
+
+            <div class="bg-gradient-to-br from-emerald-800 to-emerald-600 p-8 rounded-2xl shadow-2xl text-center mt-10 text-white relative">
+                <h3 class="text-2xl font-black mb-3">Mettiti in Regola Definitivamente</h3>
+                <p class="text-sm text-emerald-100 mb-6 font-medium px-2">Smetti di rischiare sanzioni. Scarica subito il <b>Fascicolo Sicurezza Ufficiale (PDF)</b>. Include:</p>
                 
-                <button id="download-btn" type="button" class="w-full bg-emerald-500 text-white font-extrabold py-4 rounded-lg hover:bg-emerald-600 transition text-lg shadow-lg shadow-emerald-200">
-                    TEST: Scarica PDF Gratis
+                <ul class="text-sm text-left text-white mb-8 space-y-3 max-w-sm mx-auto font-medium bg-emerald-900/30 p-5 rounded-xl">
+                    <li class="flex items-center gap-2">✅ <span>Cartello CIN Ufficiale con QR integrato.</span></li>
+                    <li class="flex items-center gap-2">✅ <span>Link Amazon sicuri per acquistare i dispositivi corretti.</span></li>
+                    <li class="flex items-center gap-2">✅ <span>Registro Manutenzioni obbligatorio.</span></li>
+                    <li class="flex items-center gap-2">✅ <span>Cartello Emergenze 112 per ospiti.</span></li>
+                </ul>
+
+                <button id="download-btn" type="button" class="w-full bg-white text-emerald-800 font-extrabold py-5 rounded-xl hover:bg-slate-100 transition text-xl shadow-lg uppercase tracking-wider">
+                    SCARICA FASCICOLO A 14,90€
                 </button>
+                <p class="text-xs text-emerald-200 mt-4 uppercase tracking-widest font-bold">Modalità Test Attiva</p>
             </div>
-            <button id="reset-btn" type="button" class="w-full text-slate-400 text-sm font-bold underline mt-2 hover:text-slate-600">Rifai il test</button>
+            
+            <button id="reset-btn" type="button" class="w-full text-slate-400 text-sm font-bold underline mt-6 hover:text-slate-800">Modifica i dati inseriti</button>
         </div>
     </div>
 
     <script>
         let appData = {};
 
-        // Quando premo "Verifica"
+        // Logica Checkbox Gas per nascondere rilevatori
+        document.getElementById('hasGas').addEventListener('change', function(e) {
+            const box = document.getElementById('boxRilevatore');
+            if (e.target.checked) {
+                box.style.display = 'block';
+            } else {
+                box.style.display = 'none';
+            }
+        });
+
         document.getElementById('calc-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            appData.cin = document.getElementById('cin').value.toUpperCase();
+            appData.cin = document.getElementById('cin').value.toUpperCase().trim();
             appData.mq = parseInt(document.getElementById('mq').value);
             appData.piani = parseInt(document.getElementById('piani').value);
             appData.hasGas = document.getElementById('hasGas').checked;
+            appData.estintoriStatus = document.getElementById('estintori-status').value;
+            appData.rilevatoriStatus = appData.hasGas ? document.getElementById('rilevatori-status').value : 'esentato';
 
-            // La matematica
             appData.estintoriTotali = Math.max(Math.ceil(appData.mq / 200), appData.piani);
 
-            document.getElementById('res-estintori').textContent = appData.estintoriTotali;
-            
-            if (appData.hasGas) {
-                document.getElementById('res-gas').innerHTML = "🚨 Rilevatori Gas/Monossido <strong>OBBLIGATORI</strong>";
+            let alertsHTML = '';
+
+            // Avviso CIN
+            alertsHTML += `<div class="p-4 bg-blue-50 border-l-4 border-blue-600 rounded-r-md"><p class="font-bold text-blue-900">📄 Cartello CIN Obbligatorio</p><p class="text-sm text-blue-800">Il codice ${appData.cin} deve essere stampato ed esposto in formato A4 leggibile all'esterno dello stabile.</p></div>`;
+
+            // Avviso Estintori
+            if (appData.estintoriStatus === 'no') {
+                alertsHTML += `<div class="p-4 bg-red-50 border-l-4 border-red-600 rounded-r-md"><p class="font-bold text-red-900">❌ Multa Rischio: 6.000€ (Estintori Mancanti)</p><p class="text-sm text-red-800">Ti mancano N. ${appData.estintoriTotali} estintore/i. Richiesta capacità 13A - 6kg.</p></div>`;
+            } else if (appData.estintoriStatus === 'dubbio') {
+                alertsHTML += `<div class="p-4 bg-orange-50 border-l-4 border-orange-500 rounded-r-md"><p class="font-bold text-orange-900">⚠️ Rischio Contestazione Estintore</p><p class="text-sm text-orange-800">I modelli piccoli o non omologati "13A" comportano la sanzione. Te ne servono N. ${appData.estintoriTotali}.</p></div>`;
             } else {
-                document.getElementById('res-gas').innerHTML = "✅ ESONERATO da rilevatori gas (Full Electric)";
+                alertsHTML += `<div class="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-md"><p class="font-bold text-green-900">✅ Estintori a Norma</p><p class="text-sm text-green-800">Hai dichiarato il possesso. Ricordati che serve il Registro Firme Semestrale (incluso nel PDF).</p></div>`;
             }
 
-            // Cambio schermata
+            // Avviso Gas
+            if (appData.hasGas) {
+                if (appData.rilevatoriStatus === 'no') {
+                    alertsHTML += `<div class="p-4 bg-red-50 border-l-4 border-red-600 rounded-r-md mt-3"><p class="font-bold text-red-900">❌ Mancanza Rilevatori</p><p class="text-sm text-red-800">Devi installare dispositivi a norma EN 50291 e EN 50194 nei locali a rischio.</p></div>`;
+                } else if (appData.rilevatoriStatus === 'dubbio') {
+                    alertsHTML += `<div class="p-4 bg-orange-50 border-l-4 border-orange-500 rounded-r-md mt-3"><p class="font-bold text-orange-900">⚠️ Rilevatori Non Certificati</p><p class="text-sm text-orange-800">Senza marchio europeo EN 50291 o EN 50194, i rilevatori non sono validi per la legge.</p></div>`;
+                } else {
+                    alertsHTML += `<div class="p-4 bg-green-50 border-l-4 border-green-600 rounded-r-md mt-3"><p class="font-bold text-green-900">✅ Rilevatori Presenti</p><p class="text-sm text-green-800">La tua struttura risulta protetta a norma di legge.</p></div>`;
+                }
+            } else {
+                alertsHTML += `<div class="p-4 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-md mt-3"><p class="font-bold text-emerald-900">🎉 Esenzione Gas</p><p class="text-sm text-emerald-800">Essendo Full Electric, la legge ti ESONERA dall'obbligo di acquisto dei rilevatori (Risparmio!).</p></div>`;
+            }
+
+            document.getElementById('alerts-container').innerHTML = alertsHTML;
+
+            // Generazione anteprima QR CODE su schermo
+            const qrUrl = `https://bdsr.ministeroturismo.gov.it/struttura/${appData.cin}`;
+            QRCode.toCanvas(document.getElementById('qr-preview'), qrUrl, { width: 180, margin: 1, color: { dark: '#0f172a' } }, function (error) {
+                if (error) console.error(error)
+            });
+
+            // Switch schermata
             document.getElementById('form-section').classList.add('hidden');
             document.getElementById('form-section').classList.remove('block');
             document.getElementById('result-section').classList.remove('hidden');
             document.getElementById('result-section').classList.add('block');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Tasto Rifai Test
         document.getElementById('reset-btn').addEventListener('click', function() {
             document.getElementById('result-section').classList.add('hidden');
             document.getElementById('result-section').classList.remove('block');
             document.getElementById('form-section').classList.remove('hidden');
             document.getElementById('form-section').classList.add('block');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
-        // Generatore PDF
+        // Generatore PDF (Il Prodotto)
         document.getElementById('download-btn').addEventListener('click', async function() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            const btn = document.getElementById('download-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "Generazione PDF in corso... ⏳";
             
-            // PAGINA 1
-            doc.setFillColor(245, 247, 250);
-            doc.rect(0, 0, 210, 297, 'F');
-            doc.setDrawColor(0, 0, 0);
-            doc.setLineWidth(2);
-            doc.rect(10, 10, 190, 277);
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(28);
-            doc.text("LOCAZIONE TURISTICA", 105, 40, { align: "center" });
-            
-            doc.setFontSize(16);
-            doc.setFont("helvetica", "normal");
-            doc.text("Codice Identificativo Nazionale (CIN)", 105, 60, { align: "center" });
-
-            doc.setFontSize(40);
-            doc.setFont("helvetica", "bold");
-            doc.setTextColor(220, 38, 38);
-            doc.text(appData.cin, 105, 85, { align: "center" });
-            doc.setTextColor(0, 0, 0);
-
             try {
-                const qrDataUrl = await QRCode.toDataURL(`https://bdsr.ministeroturismo.gov.it/struttura/${appData.cin}`, { width: 400, margin: 2 });
-                doc.addImage(qrDataUrl, 'PNG', 65, 110, 80, 80);
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                // PAGINA 1: CARTELLO
+                doc.setFillColor(248, 250, 252);
+                doc.rect(0, 0, 210, 297, 'F');
+                doc.setDrawColor(15, 23, 42); // Slate 900
+                doc.setLineWidth(3);
+                doc.rect(10, 10, 190, 277);
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(32);
+                doc.text("LOCAZIONE TURISTICA", 105, 45, { align: "center" });
+                
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "normal");
+                doc.text("Codice Identificativo Nazionale (CIN) - D.Lgs 191/2023", 105, 60, { align: "center" });
+
+                doc.setFontSize(45);
+                doc.setFont("helvetica", "bold");
+                doc.setTextColor(220, 38, 38); // Red
+                doc.text(appData.cin, 105, 85, { align: "center" });
+                doc.setTextColor(0, 0, 0);
+
+                // Genero e inserisco il QR Code nel PDF in modo infallibile
+                const qrUrl = `https://bdsr.ministeroturismo.gov.it/struttura/${appData.cin}`;
+                const qrCanvas = document.createElement("canvas");
+                await QRCode.toCanvas(qrCanvas, qrUrl, { width: 400, margin: 1 });
+                const qrDataUrl = qrCanvas.toDataURL("image/png");
+                doc.addImage(qrDataUrl, 'PNG', 60, 110, 90, 90);
+
+                doc.setFontSize(14);
+                doc.setFont("helvetica", "bold");
+                doc.text("Inquadra il QR Code per verifica Autorita'", 105, 225, { align: "center" });
+                
+                doc.setFontSize(10);
+                doc.setFont("helvetica", "normal");
+                doc.text("Da esporre all'esterno dello stabile in modo ben visibile.", 105, 275, { align: "center" });
+
+                // PAGINA 2: REFERTO E AMAZON
+                doc.addPage();
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(22);
+                doc.text("PRESCRIZIONI E LINK ACQUISTI", 20, 30);
+                
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "normal");
+                doc.text(`Immobile analizzato: ${appData.mq} mq su ${appData.piani} piano/i.`, 20, 45);
+
+                // ESTINTORI
+                doc.setFillColor(241, 245, 249);
+                doc.rect(20, 60, 170, 50, 'F');
+                doc.setFont("helvetica", "bold");
+                doc.text(`1. ESTINTORI RICHIESTI: N. ${appData.estintoriTotali}`, 25, 75);
+                doc.setFont("helvetica", "normal");
+                doc.text("Devono possedere capacita' estinguente 13A e carica da 6kg.", 25, 85);
+                
+                if (appData.estintoriStatus !== 'si') {
+                    doc.setTextColor(37, 99, 235); // Blue link
+                    doc.setFont("helvetica", "bold");
+                    doc.text("👉 CLICCA QUI PER COMPRARE L'ESTINTORE A NORMA SU AMAZON", 25, 100);
+                    doc.link(25, 93, 150, 10, { url: 'https://www.amazon.it/s?k=estintore+13a+6kg' });
+                    doc.setTextColor(0, 0, 0);
+                } else {
+                    doc.setTextColor(21, 128, 61); // Verde
+                    doc.text("Hai gia' gli estintori a norma. Ricorda di firmare il registro!", 25, 100);
+                    doc.setTextColor(0, 0, 0);
+                }
+
+                // GAS
+                doc.setFillColor(241, 245, 249);
+                doc.rect(20, 130, 170, 50, 'F');
+                doc.setFont("helvetica", "bold");
+                doc.text(`2. RILEVATORI GAS/MONOSSIDO: ${appData.hasGas ? "OBBLIGATORIO" : "ESONERATO"}`, 25, 145);
+                doc.setFont("helvetica", "normal");
+                
+                if (appData.hasGas) {
+                  doc.text("Devono essere conformi a norme EN 50291 e EN 50194.", 25, 155);
+                  if (appData.rilevatoriStatus !== 'si') {
+                      doc.setTextColor(37, 99, 235);
+                      doc.setFont("helvetica", "bold");
+                      doc.text("👉 CLICCA QUI PER COMPRARE I RILEVATORI SU AMAZON", 25, 170);
+                      doc.link(25, 163, 150, 10, { url: 'https://www.amazon.it/s?k=rilevatore+monossido+metano+en50291' });
+                      doc.setTextColor(0, 0, 0);
+                  } else {
+                      doc.setTextColor(21, 128, 61); 
+                      doc.text("Hai gia' i rilevatori a norma.", 25, 170);
+                      doc.setTextColor(0, 0, 0);
+                  }
+                } else {
+                  doc.setTextColor(21, 128, 61); // Verde
+                  doc.text("Struttura Full Electric. Sei esonerato dall'acquisto.", 25, 155);
+                  doc.setTextColor(0, 0, 0);
+                }
+
+                // PAGINA 3: REGISTRO MANUTENZIONE
+                doc.addPage();
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(22);
+                doc.text("REGISTRO MANUTENZIONE ESTINTORI", 20, 30);
+                doc.setFontSize(11);
+                doc.setFont("helvetica", "normal");
+                doc.text("Legge UNI 9994-1. Effettuare controllo visivo semestrale e firmare.", 20, 45);
+                
+                doc.setLineWidth(0.5);
+                doc.rect(20, 60, 170, 10);
+                doc.setFont("helvetica", "bold");
+                doc.text("DATA CONTROLLO", 25, 67); 
+                doc.text("ESITO VISIVO", 95, 67); 
+                doc.text("FIRMA", 145, 67);
+                
+                doc.setFont("helvetica", "normal");
+                for(let i=0; i<11; i++) {
+                  doc.rect(20, 70 + (i*15), 170, 15);
+                }
+
+                // PAGINA 4: EMERGENZE
+                doc.addPage();
+                doc.setFillColor(220, 38, 38); // Red
+                doc.rect(0, 0, 210, 40, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(24);
+                doc.setFont("helvetica", "bold");
+                doc.text("NUMERI DI EMERGENZA / EMERGENCY", 105, 25, { align: "center" });
+                
+                doc.setTextColor(0, 0, 0);
+                doc.setFontSize(18);
+                doc.text("Pronto Intervento Unico (Police/Fire/Ambulance)", 20, 70);
+                doc.setFontSize(45);
+                doc.text("112", 20, 95);
+
+                doc.setFontSize(16);
+                doc.setFont("helvetica", "normal");
+                doc.text("Indirizzo Struttura / Address:", 20, 150);
+                doc.line(20, 160, 190, 160);
+
+                doc.text("Rete Wi-Fi / Wi-Fi Network:", 20, 200);
+                doc.line(20, 210, 190, 210);
+                
+                doc.text("Password Wi-Fi:", 20, 250);
+                doc.line(20, 260, 190, 260);
+
+                doc.save(`Fascicolo_Sicurezza_${appData.cin}.pdf`);
+                btn.innerHTML = originalText;
+                
             } catch (err) {
-                console.error("Errore QR:", err);
+                console.error(err);
+                alert("Si è verificato un errore. Riprova.");
+                btn.innerHTML = originalText;
             }
-
-            doc.setFontSize(12);
-            doc.text("Scansiona per verificare la regolarita' della struttura", 105, 205, { align: "center" });
-
-            // PAGINA 2
-            doc.addPage();
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
-            doc.text("IL TUO KIT SICUREZZA (D.Lgs 191/2023)", 20, 30);
-            
-            doc.setFontSize(14);
-            doc.setFont("helvetica", "normal");
-            doc.text(`In base ai tuoi dati (${appData.mq} mq, ${appData.piani} piani):`, 20, 50);
-
-            doc.setFont("helvetica", "bold");
-            doc.text(`1. ESTINTORI OBBLIGATORI: N. ${appData.estintoriTotali}`, 20, 70);
-            doc.setFont("helvetica", "normal");
-            doc.text("- Tipo richiesto: Capacita' minima 13A e carica da 6kg.", 25, 80);
-            doc.text("- Posizione: Vicino agli ingressi o zone a rischio.", 25, 90);
-
-            doc.setFont("helvetica", "bold");
-            doc.text(`2. RILEVATORI GAS/MONOSSIDO: ${appData.hasGas ? "OBBLIGATORI" : "ESONERATO"}`, 20, 120);
-            doc.setFont("helvetica", "normal");
-            
-            if (appData.hasGas) {
-              doc.text("- Devi installare dispositivi a norma EN 50291 e EN 50194.", 25, 130);
-              doc.text("- Posizione: Nel locale con impianto a gas (es. cucina).", 25, 140);
-            } else {
-              doc.setTextColor(34, 197, 94);
-              doc.text("- Struttura 'Full Electric': non hai impianti a gas in casa.", 25, 130);
-              doc.text("- Sei legalmente ESONERATO dall'installazione dei rilevatori.", 25, 140);
-              doc.setTextColor(0, 0, 0);
-            }
-
-            // PAGINA 3
-            doc.addPage();
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
-            doc.text("REGISTRO MANUTENZIONE ESTINTORI", 20, 30);
-            doc.setFontSize(12);
-            doc.setFont("helvetica", "normal");
-            doc.text("Compila questo registro ogni 6 mesi per dimostrare i controlli visivi.", 20, 45);
-            
-            doc.setLineWidth(0.5);
-            doc.rect(20, 60, 170, 10);
-            doc.setFont("helvetica", "bold");
-            doc.text("DATA CONTROLLO", 25, 67); 
-            doc.text("ESITO", 95, 67); 
-            doc.text("FIRMA", 145, 67);
-            
-            doc.setFont("helvetica", "normal");
-            for(let i=0; i<10; i++) {
-              doc.rect(20, 70 + (i*15), 170, 15);
-            }
-
-            // PAGINA 4
-            doc.addPage();
-            doc.setFillColor(220, 38, 38);
-            doc.rect(0, 0, 210, 40, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(26);
-            doc.setFont("helvetica", "bold");
-            doc.text("NUMERI DI EMERGENZA / EMERGENCY", 105, 25, { align: "center" });
-            
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(18);
-            doc.text("Pronto Intervento (Police / Fire / Ambulance)", 20, 70);
-            doc.setFontSize(36);
-            doc.setFont("helvetica", "bold");
-            doc.setTextColor(220, 38, 38);
-            doc.text("112", 20, 90);
-
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(18);
-            doc.setFont("helvetica", "normal");
-            doc.text("Indirizzo Struttura / Property Address:", 20, 130);
-            doc.line(20, 145, 190, 145);
-
-            doc.text("Rete Wi-Fi / Wi-Fi Network:", 20, 180);
-            doc.line(20, 195, 190, 195);
-            
-            doc.text("Password Wi-Fi:", 20, 230);
-            doc.line(20, 245, 190, 245);
-
-            doc.save(`Kit_Compliance_${appData.cin}.pdf`);
         });
     </script>
 </body>
