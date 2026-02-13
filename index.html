@@ -3,21 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HostSicuro | Messa a norma Affitti Brevi D.Lgs 191/2023</title>
+    <title>ComplianceBnB | Ispezione Affitti Brevi D.Lgs 191/2023</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .modal-active { overflow: hidden; }
     </style>
 </head>
-<body id="app-body" class="bg-slate-50 text-slate-800 min-h-screen transition-colors duration-300">
+<body id="app-body" class="bg-slate-50 text-slate-800 min-h-screen transition-colors duration-300 flex flex-col">
 
-    <div id="verify-page" class="hidden min-h-screen flex-col items-center justify-center p-4 bg-slate-900">
+    <div id="cookie-banner" class="fixed bottom-0 left-0 right-0 bg-slate-900 text-white p-4 z-50 flex flex-col md:flex-row items-center justify-between shadow-[0_-10px_30px_rgba(0,0,0,0.3)] transform transition-transform duration-500 translate-y-full">
+        <div class="text-sm text-slate-300 mb-3 md:mb-0 max-w-4xl">
+            <strong>Informativa sui Cookie:</strong> Utilizziamo esclusivamente cookie tecnici essenziali per far funzionare correttamente questa web-app e garantire la sicurezza delle tue transazioni. Non usiamo cookie di profilazione invasivi. 
+            <button onclick="openModal('privacy-modal', 'Privacy & Cookie Policy')" class="text-blue-400 underline ml-1 hover:text-blue-300">Scopri di più</button>.
+        </div>
+        <button id="btn-accept-cookie" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg whitespace-nowrap transition">
+            Accetto e Chiudo
+        </button>
+    </div>
+
+    <div id="legal-modal" class="fixed inset-0 bg-slate-900/80 z-[60] hidden flex items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[80vh] flex flex-col shadow-2xl overflow-hidden">
+            <div class="p-6 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+                <h3 id="modal-title" class="text-xl font-bold text-slate-900 uppercase tracking-widest">Documento Legale</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-red-600 text-3xl font-bold transition leading-none">&times;</button>
+            </div>
+            <div id="modal-content" class="p-6 overflow-y-auto text-sm text-slate-600 leading-relaxed space-y-4">
+                </div>
+            <div class="p-4 border-t border-slate-200 bg-slate-50 text-right">
+                <button onclick="closeModal()" class="bg-slate-900 text-white px-8 py-3 rounded-xl font-bold hover:bg-slate-800 transition w-full md:w-auto">Ho capito, chiudi</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="verify-page" class="hidden flex-grow flex-col items-center justify-center p-4 bg-slate-900">
         <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-sm w-full text-center border-t-8 border-blue-600">
             <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-inner">🛡️</div>
-            <h2 class="text-2xl font-black text-slate-900 mb-1">HostSicuro</h2>
+            <h2 class="text-2xl font-black text-slate-900 mb-1">ComplianceBnB</h2>
             <p class="text-slate-500 text-sm mb-6 font-medium">Scheda Struttura Verificata</p>
             <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mb-8 shadow-sm">
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Codice CIN Rilevato</p>
@@ -26,10 +51,10 @@
             <button id="btn-copy-cin" class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl mb-3 flex items-center justify-center gap-2 hover:bg-slate-800 transition shadow-lg active:scale-95">📋 1. COPIA CODICE</button>
             <a href="https://bdsr.ministeroturismo.gov.it/ricerca-cin" target="_blank" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:bg-blue-700 transition shadow-lg active:scale-95">🏛️ 2. VERIFICA SUL MINISTERO</a>
         </div>
-        <div class="text-slate-500 text-xs mt-8 font-medium tracking-widest uppercase">Powered by HostSicuro</div>
+        <div class="text-slate-500 text-xs mt-8 font-medium tracking-widest uppercase">Powered by ComplianceBnB</div>
     </div>
 
-    <div id="success-page" class="hidden min-h-screen flex-col items-center justify-center p-4 bg-emerald-900">
+    <div id="success-page" class="hidden flex-grow flex-col items-center justify-center p-4 bg-emerald-900">
         <div class="bg-white rounded-3xl shadow-2xl p-10 max-w-md w-full text-center border-t-8 border-emerald-500">
             <div class="w-24 h-24 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-5xl mx-auto mb-6 shadow-inner animate-bounce">✓</div>
             <h2 class="text-3xl font-black text-slate-900 mb-2">Pagamento Ricevuto!</h2>
@@ -41,42 +66,42 @@
         </div>
     </div>
 
-    <div id="main-app" class="flex flex-col items-center pb-12">
+    <div id="main-app" class="flex flex-col items-center flex-grow">
         
         <header class="w-full bg-slate-900 pt-16 pb-24 px-4 text-center border-b-[6px] border-blue-600 relative overflow-hidden">
             <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4=')]"></div>
             <div class="max-w-4xl mx-auto relative z-10">
-                <div class="inline-flex items-center gap-2 bg-slate-800 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-widest mb-6 border border-slate-700">
-                    <span class="text-xl">🛡️</span> HostSicuro Italia
+                <div class="inline-flex items-center gap-2 bg-slate-800 text-white px-5 py-2 rounded-full text-sm font-bold uppercase tracking-widest mb-6 border border-slate-700 shadow-md">
+                    <span class="text-xl">🛡️</span> ComplianceBnB Italia
                 </div>
                 <h1 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight leading-tight">Mettiti in regola con la Legge in <span class="text-blue-500">60 secondi.</span></h1>
                 <p class="text-lg md:text-xl text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed">Evita ispezioni e multe. L'unico strumento online che automatizza il tuo Cartello CIN (Smart QR) e l'Audit Antincendio obbligatorio del D.Lgs 191/2023.</p>
-                <a href="#form-container" class="mt-8 inline-block bg-blue-600 text-white font-bold py-4 px-8 rounded-full hover:bg-blue-500 transition shadow-[0_0_20px_rgba(37,99,235,0.4)] uppercase tracking-wider">
+                <a href="#form-container" class="mt-8 inline-block bg-blue-600 text-white font-bold py-4 px-10 rounded-xl hover:bg-blue-500 transition shadow-[0_0_20px_rgba(37,99,235,0.4)] uppercase tracking-wider text-lg">
                     Esegui Audit Gratuito
                 </a>
             </div>
         </header>
 
-        <div class="max-w-5xl w-full mx-auto px-4 -mt-12 relative z-20">
+        <div class="max-w-5xl w-full mx-auto px-4 -mt-12 relative z-20 pb-16">
             
             <div class="bg-white rounded-2xl shadow-xl border border-slate-200 p-8 md:p-10 mb-12">
                 <h2 class="text-2xl font-black text-slate-900 mb-2 uppercase tracking-wide text-center">Rischio Sanzioni D.Lgs 191/2023</h2>
                 <p class="text-center text-slate-500 mb-8 font-medium">Sintesi degli obblighi in vigore per le Locazioni Turistiche (Art. 13-ter)</p>
                 
                 <div class="grid md:grid-cols-3 gap-6">
-                    <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-300 transition duration-300">
+                    <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
                         <div class="text-4xl mb-3">📄</div>
                         <h3 class="font-bold text-slate-900 text-lg mb-2">Cartello CIN Esterno</h3>
                         <p class="text-sm text-slate-600 mb-4 leading-relaxed">Obbligo di esposizione del Codice CIN all'esterno dello stabile in formato leggibile per agevolare i controlli. Il QR Code è raccomandato.</p>
                         <div class="inline-block bg-red-100 text-red-800 text-xs font-black px-3 py-1 rounded tracking-widest uppercase">Multa: 500€ - 5.000€</div>
                     </div>
-                    <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-300 transition duration-300">
+                    <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
                         <div class="text-4xl mb-3">🧯</div>
                         <h3 class="font-bold text-slate-900 text-lg mb-2">Estintori 13A (6kg)</h3>
                         <p class="text-sm text-slate-600 mb-4 leading-relaxed">Obbligo di N.1 estintore ogni 200mq e 1 per piano. I piccoli modelli da auto/barca non sono legali. Richiesta specifica sigla 13A.</p>
                         <div class="inline-block bg-red-100 text-red-800 text-xs font-black px-3 py-1 rounded tracking-widest uppercase">Multa: 600€ - 6.000€</div>
                     </div>
-                    <div class="bg-slate-50 rounded-xl p-6 border border-slate-200 hover:border-blue-300 transition duration-300">
+                    <div class="bg-slate-50 rounded-xl p-6 border border-slate-200">
                         <div class="text-4xl mb-3">🚨</div>
                         <h3 class="font-bold text-slate-900 text-lg mb-2">Rilevatori di Gas</h3>
                         <p class="text-sm text-slate-600 mb-4 leading-relaxed">In presenza di fornelli o caldaie a gas, è obbligatorio installare rilevatori a norma europea EN 50194 ed EN 50291.</p>
@@ -161,7 +186,7 @@
                         </div>
                     </div>
 
-                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 p-8 md:p-10 rounded-2xl shadow-2xl mt-12 text-white relative border-2 border-emerald-500">
+                    <div class="bg-slate-900 p-8 md:p-10 rounded-2xl shadow-2xl mt-12 text-white relative border-2 border-emerald-500">
                         <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-emerald-500 text-white font-bold px-6 py-1 rounded-full text-sm uppercase tracking-widest shadow-lg">
                             Mettiti in Regola
                         </div>
@@ -169,17 +194,30 @@
                         <h3 class="text-2xl font-black mb-3 mt-2 text-center text-emerald-400">Scarica il Fascicolo Ufficiale</h3>
                         <p class="text-sm text-slate-300 mb-8 font-medium text-center">Dimentica l'ansia delle multe. Ottieni il pacchetto legale completo in formato PDF A4 pronto da stampare:</p>
                         
-                        <ul class="text-sm text-left text-white mb-8 space-y-4 max-w-sm mx-auto font-medium bg-slate-950/50 p-6 rounded-xl border border-slate-700">
+                        <ul class="text-sm text-left text-white mb-8 space-y-4 max-w-sm mx-auto font-medium bg-slate-800 p-6 rounded-xl border border-slate-700">
                             <li class="flex items-center gap-3"><span class="text-emerald-500 text-lg leading-none">✓</span> <span><b>Cartello CIN Legale</b> con Smart QR.</span></li>
                             <li class="flex items-center gap-3"><span class="text-emerald-500 text-lg leading-none">✓</span> <span><b>Referto Acquisti</b> con link Amazon esatti.</span></li>
                             <li class="flex items-center gap-3"><span class="text-emerald-500 text-lg leading-none">✓</span> <span><b>Registro Manutenzioni</b> obbligatorio.</span></li>
                             <li class="flex items-center gap-3"><span class="text-emerald-500 text-lg leading-none">✓</span> <span><b>Cartello Emergenze 112</b> per gli ospiti.</span></li>
                         </ul>
 
-                        <button id="btn-pay-stripe" type="button" class="w-full bg-emerald-500 text-white font-black py-5 rounded-xl hover:bg-emerald-400 transition text-xl shadow-[0_0_20px_rgba(16,185,129,0.4)] uppercase tracking-wider flex items-center justify-center gap-2 transform active:scale-95">
+                        <button id="btn-pay-stripe" type="button" class="w-full bg-emerald-500 text-white font-black py-5 rounded-xl hover:bg-emerald-400 transition text-xl shadow-[0_0_20px_rgba(16,185,129,0.4)] uppercase tracking-wider flex items-center justify-center gap-2 transform active:scale-95 mb-4">
                             🔒 ACQUISTA PDF (14,90€)
                         </button>
-                        <p class="text-xs text-slate-400 mt-5 text-center font-medium">Pagamento sicuro crittografato gestito da Stripe®</p>
+
+                        <div class="mt-6 pt-5 border-t border-slate-700 flex flex-col items-center">
+                            <div class="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-3">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
+                                Pagamento Sicuro SSL 256-bit
+                            </div>
+                            <div class="flex gap-2 text-white items-center justify-center opacity-70">
+                                <span class="text-[10px] font-black border border-slate-500 bg-slate-800 px-2 py-1 rounded">Stripe</span>
+                                <span class="text-[10px] font-black border border-slate-500 bg-slate-800 px-2 py-1 rounded">VISA</span>
+                                <span class="text-[10px] font-black border border-slate-500 bg-slate-800 px-2 py-1 rounded">Mastercard</span>
+                                <span class="text-[10px] font-black border border-slate-500 bg-slate-800 px-2 py-1 rounded">Apple Pay</span>
+                            </div>
+                        </div>
+
                     </div>
                     
                     <button id="reset-btn" type="button" class="w-full text-slate-400 text-sm font-bold underline mt-6 hover:text-slate-800 text-center">Modifica i dati della struttura</button>
@@ -187,6 +225,42 @@
             </div>
         </div>
     </div>
+
+    <footer class="w-full bg-slate-950 pt-16 pb-8 px-4 border-t border-slate-800">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-10 md:gap-6">
+            <div class="text-left w-full md:w-auto">
+                <h3 class="text-white font-black text-2xl mb-2 flex items-center gap-2">
+                    <span class="text-blue-500">🛡️</span> ComplianceBnB
+                </h3>
+                <p class="text-slate-400 text-sm max-w-sm leading-relaxed mb-4">
+                    Il software italiano per l'adeguamento normativo delle Locazioni Turistiche (D.Lgs 191/2023). Genera istantaneamente la tua documentazione di legge.
+                </p>
+                <div class="text-xs text-slate-500 space-y-1">
+                    <p><strong>Brand-up di Silvia Ruzziconi</strong></p>
+                    <p>P.IVA: <strong>IT01683700494</strong></p>
+                    <p>Sede: <strong>via di Casalappi 15, 57021, Campiglia Marittima (LI)</strong></p>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:items-end w-full md:w-auto">
+                <h4 class="text-white font-bold mb-4 uppercase tracking-widest text-xs">Note Legali & Sicurezza</h4>
+                <ul class="space-y-3 text-sm text-slate-400 font-medium md:text-right">
+                    <li><button onclick="openModal('termini', 'Termini e Condizioni')" class="hover:text-white transition">Termini e Condizioni di Vendita</button></li>
+                    <li><button onclick="openModal('privacy-modal', 'Privacy & Cookie Policy')" class="hover:text-white transition">Privacy e Cookie Policy</button></li>
+                    <li><a href="mailto:info@compliancebnb.vercel.app" class="hover:text-white transition">Contatti e Assistenza</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="max-w-5xl mx-auto mt-12 pt-6 border-t border-slate-800 text-center flex flex-col md:flex-row justify-between items-center gap-4">
+            <p class="text-xs text-slate-600">&copy; 2026 ComplianceBnB. Tutti i diritti riservati. Non affiliato con enti governativi.</p>
+            <div class="flex gap-2 opacity-30 grayscale">
+                <span class="bg-slate-100 text-slate-900 px-1.5 py-0.5 rounded text-[8px] font-bold">Stripe</span>
+                <span class="bg-slate-100 text-slate-900 px-1.5 py-0.5 rounded text-[8px] font-bold">VISA</span>
+                <span class="bg-slate-100 text-slate-900 px-1.5 py-0.5 rounded text-[8px] font-bold">MC</span>
+            </div>
+        </div>
+    </footer>
 
     <script>
         // ==========================================================
@@ -196,14 +270,47 @@
 
         let appData = {};
 
-        // GESTIONE DEL RITORNO AL SITO (QR Code o Stripe)
+        // TESTI LEGALI (Per il Pop-up)
+        const testiLegali = {
+            'Privacy & Cookie Policy': "<strong>Titolare del Trattamento:</strong> l'Agenzia indicata nel footer di questo sito.<br><br><strong>1. Dati raccolti:</strong> Raccogliamo esclusivamente i dati tecnici (CIN, Metri quadri, info antincendio) inseriti per generare l'Audit e il Fascicolo PDF. Tali dati NON vengono salvati nei nostri database ma processati temporaneamente nel tuo browser.<br><br><strong>2. Pagamenti:</strong> I pagamenti sono gestiti in modo sicuro e crittografato (SSL 256-bit) tramite Stripe Inc. Non memorizziamo i dati della tua carta di credito. L'email utilizzata in fase di pagamento serve solo per inviare la ricevuta ufficiale e per eventuali contatti di assistenza.<br><br><strong>3. Cookie Policy:</strong> Il sito utilizza solo cookie tecnici di sessione strettamente necessari al funzionamento dell'acquisto, al salvataggio temporaneo per il ritorno da Stripe, e per non riproporre questo banner. Non utilizziamo cookie di profilazione pubblicitaria. Navigando accetti il loro utilizzo.<br><br><em>Per esercitare i tuoi diritti GDPR contattaci via email all'indirizzo indicato nel footer.</em>",
+            
+            'Termini e Condizioni': "<strong>Termini di Vendita e Limitazioni di Responsabilità</strong><br><br><strong>1. Oggetto del Servizio:</strong> ComplianceBnB fornisce un software automatico per la redazione assistita di cartellonistica e fascicoli informativi in formato digitale (PDF).<br><br><strong>2. Diritto di Recesso:</strong> Trattandosi della fornitura di un contenuto digitale scaricabile immediatamente, ai sensi dell'art. 59 del Codice del Consumo l'utente accetta che il diritto di recesso è escluso non appena viene effettuato il pagamento e generato il file.<br><br><strong>3. Esclusione di Responsabilità:</strong> Il software genera documenti in base ai dati inseriti. Non ci sostituiamo a consulenza tecnica o legale. Non ci assumiamo responsabilità per l'inesattezza dei dati forniti, né per eventuali sanzioni derivanti da inadempienze fisiche nell'immobile (es. non aver comprato fisicamente gli estintori dopo aver generato il cartello). Il servizio è erogato da ente privato e non è affiliato o sponsorizzato dal Ministero del Turismo o dalle Forze dell'Ordine."
+        };
+
+        // GESTIONE MODALI LEGALI E COOKIE
+        function openModal(id, titolo) {
+            document.getElementById('modal-title').innerText = titolo;
+            document.getElementById('modal-content').innerHTML = testiLegali[titolo];
+            document.getElementById('legal-modal').classList.remove('hidden');
+            document.body.classList.add('modal-active');
+        }
+
+        function closeModal() {
+            document.getElementById('legal-modal').classList.add('hidden');
+            document.body.classList.remove('modal-active');
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
+            // Controllo Cookie Banner
+            if (!localStorage.getItem('cookieAccettati')) {
+                setTimeout(() => {
+                    document.getElementById('cookie-banner').classList.remove('translate-y-full');
+                }, 1000);
+            }
+            document.getElementById('btn-accept-cookie').addEventListener('click', function() {
+                localStorage.setItem('cookieAccettati', 'true');
+                document.getElementById('cookie-banner').classList.add('translate-y-full');
+            });
+
+            // Gestione dei rientri sul sito (QR Code o Pagamento)
             const urlParams = new URLSearchParams(window.location.search);
             
-            // 1. Il Vigile inquadra il QR (Mostro la scheda)
+            // 1. Vigile / Ospite inquadra QR
             const verifyCin = urlParams.get('verify');
             if (verifyCin) {
                 document.getElementById('main-app').classList.add('hidden');
+                document.querySelector('footer').classList.add('hidden');
+                document.getElementById('cookie-banner').classList.add('hidden');
                 document.getElementById('verify-page').classList.remove('hidden');
                 document.getElementById('verify-page').classList.add('flex');
                 document.getElementById('verify-cin-text').textContent = verifyCin.toUpperCase();
@@ -211,35 +318,35 @@
                 return;
             }
 
-            // 2. L'Host ha pagato su Stripe ed è tornato!
+            // 2. Cliente ha pagato su Stripe
             const isSuccess = urlParams.get('payment');
             if (isSuccess === 'success') {
                 document.getElementById('main-app').classList.add('hidden');
+                document.querySelector('footer').classList.add('hidden');
                 document.getElementById('success-page').classList.remove('hidden');
                 document.getElementById('success-page').classList.add('flex');
                 
-                // Recupera i dati nascosti
-                const savedData = localStorage.getItem('hostSicuroData');
+                const savedData = localStorage.getItem('complianceData');
                 if (savedData) {
                     appData = JSON.parse(savedData);
-                    // Pulisco l'URL per estetica
+                    // Pulisco l'URL
                     window.history.replaceState({}, document.title, window.location.pathname);
                     
-                    // Simulo 2 secondi di caricamento poi scarico
                     setTimeout(() => {
                         generaPDF(appData);
                         document.getElementById('loading-bar').classList.add('hidden');
-                        document.getElementById('loading-text').innerHTML = "✅ Download completato!<br><span class='text-sm text-slate-400 font-normal mt-2 block'>Puoi chiudere questa pagina.</span>";
-                        localStorage.removeItem('hostSicuroData'); // Pulisce
-                    }, 2000);
+                        document.getElementById('download-status').innerHTML = "✅ Download completato!<br><span class='text-sm text-slate-400 font-normal mt-2 block'>Controlla i tuoi file scaricati. Puoi chiudere questa pagina.</span>";
+                        localStorage.removeItem('complianceData'); 
+                    }, 2500);
                 } else {
-                    document.getElementById('loading-text').innerHTML = "Ops! Dati persi. Contatta l'assistenza per ricevere il PDF.";
-                    document.getElementById('loading-text').classList.replace('text-emerald-600', 'text-red-500');
+                    document.getElementById('loading-bar').classList.add('hidden');
+                    document.getElementById('download-status').innerHTML = "Ops! Dati di sessione scaduti.<br><span class='text-sm mt-2 block text-slate-400'>Se hai pagato, contatta l'assistenza per ricevere il PDF.</span>";
+                    document.getElementById('download-status').classList.replace('text-emerald-600', 'text-red-500');
                 }
             }
         });
 
-        // Copia CIN (Scheda Digitale)
+        // Pulsante Copia CIN (Scheda)
         document.getElementById('btn-copy-cin').addEventListener('click', function() {
             navigator.clipboard.writeText(document.getElementById('verify-cin-text').textContent).then(() => {
                 const btn = document.getElementById('btn-copy-cin');
@@ -248,11 +355,12 @@
             });
         });
 
+        // Mostra/Nascondi Rilevatori
         document.getElementById('hasGas').addEventListener('change', e => {
             document.getElementById('boxRilevatore').style.display = e.target.checked ? 'block' : 'none';
         });
 
-        // ESECUZIONE AUDIT
+        // CALCOLATORE ESEGUI AUDIT
         document.getElementById('btn-esegui').addEventListener('click', function() {
             const cinVal = document.getElementById('cin').value.trim();
             const mqVal = document.getElementById('mq').value;
@@ -270,15 +378,15 @@
             appData.rilevatoriStatus = appData.hasGas ? document.getElementById('rilevatori-status').value : 'esentato';
             appData.estintoriTotali = Math.max(Math.ceil(appData.mq / 200), appData.piani);
 
-            let html = `<div class="p-5 bg-slate-50 border-l-4 border-slate-800 rounded-r-xl"><p class="font-black text-slate-900 uppercase tracking-widest text-xs mb-1">Cartello CIN</p><p class="text-sm text-slate-700">Codice <b>${appData.cin}</b> pronto per l'impaginazione.</p></div>`;
+            let html = `<div class="p-5 bg-slate-50 border-l-4 border-slate-800 rounded-r-xl"><p class="font-black text-slate-900 uppercase tracking-widest text-xs mb-1">Cartello CIN</p><p class="text-sm text-slate-700 break-all">Codice <b>${appData.cin}</b> pronto per l'impaginazione legale.</p></div>`;
 
             html += appData.estintoriStatus !== 'si' 
-                ? `<div class="p-5 bg-red-50 border-l-4 border-red-600 rounded-r-xl mt-3"><p class="font-black text-red-900 uppercase tracking-widest text-xs mb-1">Rischio Sanzione (Estintori)</p><p class="text-sm text-red-800">Obbligatori N. <b>${appData.estintoriTotali}</b> estintori 13A. Rischio: fino a 6.000€.</p></div>`
+                ? `<div class="p-5 bg-red-50 border-l-4 border-red-600 rounded-r-xl mt-3"><p class="font-black text-red-900 uppercase tracking-widest text-xs mb-1">Rischio Sanzione (Estintori)</p><p class="text-sm text-red-800">Obbligatori N. <b>${appData.estintoriTotali}</b> estintori 13A. Rischio sanzione fino a 6.000€.</p></div>`
                 : `<div class="p-5 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-xl mt-3"><p class="font-black text-emerald-900 uppercase tracking-widest text-xs mb-1">Estintori: OK</p></div>`;
 
             if (appData.hasGas) {
                 html += appData.rilevatoriStatus !== 'si'
-                    ? `<div class="p-5 bg-red-50 border-l-4 border-red-600 rounded-r-xl mt-3"><p class="font-black text-red-900 uppercase tracking-widest text-xs mb-1">Rischio Sanzione (Rilevatori)</p><p class="text-sm text-red-800">Dispositivi EN 50291/50194 mancanti. Rischio: fino a 6.000€.</p></div>`
+                    ? `<div class="p-5 bg-red-50 border-l-4 border-red-600 rounded-r-xl mt-3"><p class="font-black text-red-900 uppercase tracking-widest text-xs mb-1">Rischio Sanzione (Rilevatori)</p><p class="text-sm text-red-800">Dispositivi EN 50291/50194 mancanti o cinesi. Rischio sanzione fino a 6.000€.</p></div>`
                     : `<div class="p-5 bg-emerald-50 border-l-4 border-emerald-500 rounded-r-xl mt-3"><p class="font-black text-emerald-900 uppercase tracking-widest text-xs mb-1">Rilevatori Gas: OK</p></div>`;
             } else {
                 html += `<div class="p-5 bg-blue-50 border-l-4 border-blue-500 rounded-r-xl mt-3"><p class="font-black text-blue-900 uppercase tracking-widest text-xs mb-1">Esenzione Gas Verificata</p><p class="text-sm text-blue-800">Struttura elettrica: esonero di legge confermato.</p></div>`;
@@ -302,27 +410,25 @@
             document.getElementById('form-section').classList.remove('hidden');
         });
 
-        // 💳 IL BOTTONE CHE MANDA ALLA CASSA (STRIPE)
+        // 💳 TASTO ACQUISTA (VA SU STRIPE)
         document.getElementById('btn-pay-stripe').addEventListener('click', function() {
-            // 1. Salvo i dati di nascosto
-            localStorage.setItem('hostSicuroData', JSON.stringify(appData));
+            localStorage.setItem('complianceData', JSON.stringify(appData));
             
-            // 2. Mando a Stripe o faccio il Test
             if (STRIPE_LINK === "INSERISCI_QUI_IL_TUO_LINK_STRIPE") {
-                alert("[MODALITÀ TEST] Non hai ancora messo il tuo link Stripe nel codice. Simulo un pagamento andato a buon fine per farti provare il download.");
+                alert("[MODALITÀ TEST] Non hai ancora messo il tuo VERO link Stripe nel codice. Ora faccio finta che tu abbia pagato per mostrarti il download del PDF.");
                 window.location.href = "?payment=success";
             } else {
                 window.location.href = STRIPE_LINK;
             }
         });
 
-        // 🖨️ IL GENERATORE PDF (Il prodotto finale)
+        // 🖨️ IL GENERATORE PDF FINALE (Il Prodotto Venduto)
         function generaPDF(data) {
             try {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 
-                // PAGINA 1
+                // PAG. 1: CARTELLO
                 doc.setDrawColor(15, 23, 42); doc.setLineWidth(2); doc.rect(10, 10, 190, 277); doc.setLineWidth(0.5); doc.rect(12, 12, 186, 273);
                 doc.setFont("helvetica", "bold"); doc.setFontSize(36); doc.text("LOCAZIONE TURISTICA", 105, 45, { align: "center" });
                 doc.setFontSize(14); doc.setFont("helvetica", "normal"); doc.text("Codice Identificativo Nazionale (CIN) - D.Lgs 191/2023", 105, 55, { align: "center" });
@@ -336,7 +442,7 @@
                 doc.setFontSize(11); doc.setFont("helvetica", "normal"); doc.text("Il codice aprira' la scheda digitale della struttura per l'accesso rapido", 105, 235, { align: "center" }); doc.text("al database ufficiale del Ministero del Turismo.", 105, 242, { align: "center" });
                 doc.setFontSize(10); doc.text("Da esporre all'esterno dello stabile in modo ben visibile.", 105, 275, { align: "center" });
 
-                // PAGINA 2
+                // PAG. 2: REFERTO
                 doc.addPage(); doc.setFontSize(24); doc.setFont("helvetica", "bold"); doc.text("FASCICOLO TECNICO E PRESCRIZIONI", 20, 30);
                 doc.setFontSize(12); doc.setFont("helvetica", "normal"); doc.text(`Immobile analizzato: ${data.mq} mq disposti su ${data.piani} piano/i.`, 20, 45);
 
@@ -369,17 +475,17 @@
                   doc.setTextColor(21, 128, 61); doc.setFont("helvetica", "bold"); doc.text("L'immobile e' Full Electric: esonerato dall'obbligo di installazione.", 25, 140); doc.setTextColor(0, 0, 0);
                 }
 
-                // PAGINA 3
+                // PAG. 3: REGISTRO
                 doc.addPage(); doc.setFontSize(24); doc.setFont("helvetica", "bold"); doc.text("REGISTRO MANUTENZIONI", 20, 30);
                 doc.setFontSize(11); doc.setFont("helvetica", "normal"); doc.text("Compilare ogni 6 mesi a seguito di controllo visivo dell'Host (Obbligatorio).", 20, 40);
                 doc.setLineWidth(0.3); doc.setFillColor(240, 240, 240); doc.rect(20, 50, 170, 10, 'FD'); doc.setFont("helvetica", "bold"); doc.text("DATA", 25, 57); doc.text("ESITO CONTROLLO", 80, 57); doc.text("FIRMA", 150, 57);
                 doc.setFont("helvetica", "normal"); for(let i=0; i<13; i++) { doc.rect(20, 60 + (i*15), 170, 15); doc.line(70, 60 + (i*15), 70, 75 + (i*15)); doc.line(140, 60 + (i*15), 140, 75 + (i*15)); }
 
-                // PAGINA 4
+                // PAG. 4: EMERGENZE
                 doc.addPage(); doc.setFillColor(220, 38, 38); doc.rect(0, 0, 210, 40, 'F'); doc.setTextColor(255, 255, 255); doc.setFontSize(24); doc.setFont("helvetica", "bold"); doc.text("NUMERI DI EMERGENZA / EMERGENCY", 105, 25, { align: "center" });
                 doc.setTextColor(0, 0, 0); doc.setFontSize(18); doc.text("Pronto Intervento Unico (Police/Fire/Ambulance)", 20, 70); doc.setFontSize(45); doc.text("112", 20, 95); doc.setFontSize(16); doc.setFont("helvetica", "normal"); doc.text("Indirizzo Struttura / Address:", 20, 150); doc.line(20, 160, 190, 160); doc.text("Rete Wi-Fi / Wi-Fi Network:", 20, 200); doc.line(20, 210, 190, 210); doc.text("Password Wi-Fi:", 20, 250); doc.line(20, 260, 190, 260);
 
-                doc.save(`Fascicolo_HostSicuro_${data.cin}.pdf`);
+                doc.save(`Fascicolo_ComplianceBnB_${data.cin}.pdf`);
             } catch (err) { alert("Errore generazione PDF: " + err.message); }
         }
     </script>
