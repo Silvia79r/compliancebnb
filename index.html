@@ -68,16 +68,31 @@
 
     <div id="main-app" class="flex flex-col items-center flex-grow">
         
-        <header class="w-full bg-slate-900 pt-16 pb-24 px-4 text-center border-b-[6px] border-blue-600 relative overflow-hidden">
-            <div class="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiIGZpbGw9IiNmZmZmZmYiLz48L3N2Zz4=')]"></div>
+        <header class="w-full bg-[#0B1120] pt-20 pb-28 px-4 text-center border-b-[6px] border-blue-600 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(#334155 2px, transparent 2px); background-size: 24px 24px;"></div>
+            
             <div class="max-w-4xl mx-auto relative z-10">
-                <div class="inline-flex items-center gap-2 bg-slate-800 text-white px-5 py-2 rounded-full text-sm font-bold uppercase tracking-widest mb-6 border border-slate-700 shadow-md">
-                    <span class="text-xl">🛡️</span> ComplianceBnB Italia
+                <div class="inline-flex items-center gap-2 bg-[#1E293B] text-white px-5 py-2 rounded-full text-xs font-bold uppercase tracking-[0.15em] mb-8 border border-slate-700 shadow-md">
+                    <span class="text-base leading-none">🛡️</span> COMPLIANCEBNB ITALIA
                 </div>
-                <h1 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight leading-tight">Mettiti in regola con la Legge in <span class="text-blue-500">60 secondi.</span></h1>
-                <p class="text-lg md:text-xl text-slate-300 font-medium max-w-2xl mx-auto leading-relaxed">Evita ispezioni e multe. L'unico strumento online che automatizza il tuo Audit Antincendio e il Cartello CIN con <b class="text-white bg-blue-600/30 px-2 py-1 rounded">Smart QR Garantito a Vita</b> (nessuna scadenza).</p>
-                <a href="#form-container" class="mt-8 inline-block bg-blue-600 text-white font-bold py-4 px-10 rounded-xl hover:bg-blue-500 transition shadow-[0_0_20px_rgba(37,99,235,0.4)] uppercase tracking-wider text-lg">
-                    Esegui Audit Gratuito
+                
+                <h1 class="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight leading-[1.1]">
+                    Affitti Locazioni Turistiche?>/br>Mettiti in regola con la Legge in <br class="hidden md:block">
+                    <span class="text-blue-500">60 secondi.</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-slate-300 font-medium max-w-3xl mx-auto leading-relaxed">
+                    Evita ispezioni e multe. L'unico strumento online che automatizza il tuo <br class="hidden lg:block">
+                    Audit Antincendio e il Cartello CIN con 
+                    <span class="inline-block bg-[#1e3a8a] text-white px-3 py-1 rounded-md font-bold shadow-md mx-1 border border-blue-800 mt-2 md:mt-0">
+                        Smart QR Garantito a Vita
+                    </span> 
+                    <br class="hidden lg:block">
+                    <span class="inline-block mt-1 text-slate-400 text-sm">(nessuna scadenza).</span>
+                </p>
+                
+                <a href="#form-container" class="mt-12 inline-block bg-blue-600 text-white font-black py-4 px-10 rounded-xl hover:bg-blue-500 transition shadow-[0_0_30px_rgba(37,99,235,0.4)] uppercase tracking-wider text-lg transform active:scale-95">
+                    Avvia Audit Gratuito
                 </a>
             </div>
         </header>
@@ -267,18 +282,18 @@
             </div>
         </div>
     </footer>
+
     <script>
         // ==========================================================
         // 🚨 CABINA DI REGIA: IMPOSTAZIONI FINALI 🚨
         // ==========================================================
         
-        // Lo faremo per ultimo (ora è in modalità TEST)
-        const STRIPE_LINK = "INSERISCI_QUI_IL_TUO_LINK_STRIPE"; 
+        // 1. IL TUO VERO LINK DI PAGAMENTO STRIPE VA INCOLLATO QUI:
+        const STRIPE_LINK = "https://buy.stripe.com/test_5kQ14oeYWgXu5l84k98ww00"; 
         
-        // I TUOI LINK AMAZON AFFILIATI (Ho già inserito il tuo ID brandup26-21)
-        // Usano parole chiave specifiche per mostrare solo i prodotti a norma!
-        const AMAZON_LINK_ESTINTORE = "https://www.amazon.it/s?k=estintore+13A+6kg+omologato&tag=brandup26-21";
-        const AMAZON_LINK_RILEVATORE = "https://www.amazon.it/s?k=rilevatore+gas+monossido+metano+en50291+en50194&tag=brandup26-21";
+        // 2. I TUOI LINK AMAZON DI RICERCA (Già configurati col tuo ID: brandup26-21)
+        const AMAZON_LINK_ESTINTORE = "https://www.amazon.it/s?k=estintore+13a+6kg&tag=brandup26-21";
+        const AMAZON_LINK_RILEVATORE = "https://www.amazon.it/s?k=rilevatore+gas+monossido+metano+en50291&tag=brandup26-21";
         
         // ==========================================================
 
@@ -305,7 +320,7 @@
         document.addEventListener("DOMContentLoaded", function() {
             const urlParams = new URLSearchParams(window.location.search);
             
-            // IL PONTE INVISIBILE PER AMAZON
+            // PONTE INVISIBILE PER AMAZON (Antiban)
             const outTarget = urlParams.get('out');
             if (outTarget === 'estintore') {
                 window.location.replace(AMAZON_LINK_ESTINTORE);
@@ -324,6 +339,7 @@
                 document.getElementById('cookie-banner').classList.add('translate-y-full');
             });
 
+            // ROUTING DELLA SCHEDA OSPITE/POLIZIA
             const verifyCin = urlParams.get('verify');
             if (verifyCin) {
                 document.getElementById('main-app').classList.add('hidden');
@@ -336,6 +352,7 @@
                 return;
             }
 
+            // RITORNO DA STRIPE CON SUCCESSO
             const isSuccess = urlParams.get('payment');
             if (isSuccess === 'success') {
                 document.getElementById('main-app').classList.add('hidden');
@@ -356,7 +373,7 @@
                     }, 2500);
                 } else {
                     document.getElementById('loading-bar').classList.add('hidden');
-                    document.getElementById('download-status').innerHTML = "Ops! Dati di sessione scaduti.<br><span class='text-sm mt-2 block text-slate-400'>Se hai pagato, contatta l'assistenza per ricevere il PDF.</span>";
+                    document.getElementById('download-status').innerHTML = "Ops! Dati di sessione scaduti.<br><span class='text-sm mt-2 block text-slate-400'>Se hai pagato, contatta l'assistenza indicata in fondo al sito per ricevere il tuo PDF.</span>";
                     document.getElementById('download-status').classList.replace('text-emerald-600', 'text-red-500');
                 }
             }
@@ -374,6 +391,7 @@
             document.getElementById('boxRilevatore').style.display = e.target.checked ? 'block' : 'none';
         });
 
+        // ESEGUI AUDIT
         document.getElementById('btn-esegui').addEventListener('click', function() {
             const cinVal = document.getElementById('cin').value.trim();
             const mqVal = document.getElementById('mq').value;
@@ -423,17 +441,18 @@
             document.getElementById('form-section').classList.remove('hidden');
         });
 
+        // PAGAMENTO E REDIRECT A STRIPE REALE
         document.getElementById('btn-pay-stripe').addEventListener('click', function() {
             localStorage.setItem('complianceData', JSON.stringify(appData));
             
-            if (STRIPE_LINK === "INSERISCI_QUI_IL_TUO_LINK_STRIPE") {
-                alert("[MODALITÀ TEST] Stripe non è ancora collegato. Simulo l'acquisto per farti testare il download del PDF e verificare i tuoi Link Amazon.");
-                window.location.href = "?payment=success";
+            if (STRIPE_LINK === "INSERISCI_QUI_IL_TUO_LINK_STRIPE" || STRIPE_LINK.trim() === "") {
+                alert("⚠️ Errore: Non hai ancora inserito il tuo vero link Stripe nel codice (riga 363).");
             } else {
                 window.location.href = STRIPE_LINK;
             }
         });
 
+        // GENERATORE PDF
         function generaPDF(data) {
             try {
                 const baseUrl = window.location.origin + window.location.pathname;
