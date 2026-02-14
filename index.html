@@ -76,26 +76,24 @@
                     <span class="text-base leading-none">🛡️</span> COMPLIANCEBNB ITALIA
                 </div>
                 
-                <h1 class="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight leading-[1.1]">
-                    Affitti Locazioni Turistiche?</br>Mettiti in regola con la Legge in <br class="hidden md:block">
-                    <span class="text-blue-500">60 secondi.</span>
+                <h1 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight leading-[1.1]">
+                    Gestisci Affitti Brevi o <br class="hidden md:block">
+                    <span class="text-blue-500">Locazioni Turistiche?</span>
                 </h1>
-                <h3 class="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight leading-[1.1]">
-                    Mettiti in regola con la Legge in <br class="hidden md:block">
-                    <span class="text-blue-500">60 secondi.</span>
-                </h3>
                 
-                <p class="text-lg md:text-xl text-slate-300 font-medium max-w-3xl mx-auto leading-relaxed">
-                    Evita ispezioni e multe. L'unico strumento online che automatizza il tuo <br class="hidden lg:block">
-                    Audit Antincendio e il Cartello CIN con 
-                    <span class="inline-block bg-[#1e3a8a] text-white px-3 py-1 rounded-md font-bold shadow-md mx-1 border border-blue-800 mt-2 md:mt-0">
+                <h2 class="text-xl md:text-3xl font-bold text-slate-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    Sai che rischi fino a <span class="text-red-500 bg-red-500/10 px-2 py-1 rounded border border-red-500/20 whitespace-nowrap">6.000€ di multe</span> per mancanze su CIN, estintori e rilevatori di fumo?
+                </h2>
+                
+                <p class="text-base md:text-lg text-slate-400 font-medium max-w-2xl mx-auto leading-relaxed">
+                    Mettiti in regola in <strong class="text-white text-xl">60 secondi.</strong> L'unico strumento online che automatizza il tuo Audit Antincendio e il Cartello CIN con 
+                    <span class="inline-block bg-[#1e3a8a] text-white px-2 py-0.5 rounded-md font-bold shadow-md mx-1 border border-blue-800 mt-2 md:mt-0">
                         Smart QR Garantito a Vita
                     </span> 
-                    <br class="hidden lg:block">
-                    <span class="inline-block mt-1 text-slate-400 text-sm">(nessuna scadenza).</span>
+                    (nessuna scadenza).
                 </p>
                 
-                <a href="#form-container" class="mt-12 inline-block bg-blue-600 text-white font-black py-4 px-10 rounded-xl hover:bg-blue-500 transition shadow-[0_0_30px_rgba(37,99,235,0.4)] uppercase tracking-wider text-lg transform active:scale-95">
+                <a href="#form-container" class="mt-10 inline-block bg-blue-600 text-white font-black py-4 px-10 rounded-xl hover:bg-blue-500 transition shadow-[0_0_30px_rgba(37,99,235,0.4)] uppercase tracking-wider text-lg transform active:scale-95">
                     Avvia Audit Gratuito
                 </a>
             </div>
@@ -450,7 +448,7 @@
             localStorage.setItem('complianceData', JSON.stringify(appData));
             
             if (STRIPE_LINK === "INSERISCI_QUI_IL_TUO_LINK_STRIPE" || STRIPE_LINK.trim() === "") {
-                alert("⚠️ Errore: Non hai ancora inserito il tuo vero link Stripe nel codice (riga 363).");
+                alert("⚠️ Errore: Inserisci il tuo vero link Stripe nel codice (riga 387) per abilitare i pagamenti.");
             } else {
                 window.location.href = STRIPE_LINK;
             }
